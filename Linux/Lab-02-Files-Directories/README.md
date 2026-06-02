@@ -74,11 +74,11 @@ Appends output to the end of a file without overwriting existing content.
 
 ### Screenshot 2 - Creating Files
 
-(Embed screenshot2-create-file.png)
+![Creating Files](Screenshots/screenshot2-create-file.png)
 
 ### Screenshot 3 - Copying Files
 
-(Embed screenshot3-copy-file.png)
+![Copying Files](Screenshots/screenshot3-copy-file.png)
 
 ### Screenshot 4 - Moving and Renaming Files
 
