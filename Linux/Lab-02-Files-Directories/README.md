@@ -70,7 +70,7 @@ Appends output to the end of a file without overwriting existing content.
 
 ### Screenshot 1 - Creating Directories
 
-(Embed screenshot1-create-directory.png)
+![Creating Directories](Screenshots/screenshot1-create-directory.png)
 
 ### Screenshot 2 - Creating Files
 
