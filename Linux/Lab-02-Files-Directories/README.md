@@ -82,15 +82,15 @@ Appends output to the end of a file without overwriting existing content.
 
 ### Screenshot 4 - Moving and Renaming Files
 
-(Embed screenshot4-move-rename-file.png)
+![ Moving and Renaming Files](Screenshots/screenshot4-move-rename-file.png)
 
 ### Screenshot 5 - Output Redirection
 
-(Embed screenshot5-redirection.png)
+![Output Redirection](Screenshots/screenshot5-redirection.png)
 
 ### Screenshot 6 - Deleting Files and Directories
 
-(Embed screenshot6-delete-files-directories.png)
+![Deleting Files and Directories](Screenshots/screenshot6-delete-files-directories.png)
 
 ---
 
