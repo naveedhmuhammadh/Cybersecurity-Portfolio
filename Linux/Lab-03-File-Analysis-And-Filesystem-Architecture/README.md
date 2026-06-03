@@ -120,10 +120,11 @@ and learned their roles within the Linux operating system.
 
 ### less Command
 
+*command 
 #### ![Less Command](Screenshots/screenshot5A-less-command.png) 
-#### ![Less Command](Screenshots/screenshot5B-less-command.png) 
 
 *Terminal Pager Interface
+#### ![Less Command](Screenshots/screenshot5B-less-command.png) 
 
 ### /home Directory
 
