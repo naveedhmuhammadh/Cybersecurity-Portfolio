@@ -97,6 +97,7 @@ Example:
 ```bash
 less /etc/services
 ```
+Uses an absolute path to open the file with the "less" file viewer, since it is outside the current working directory. The leading slash (/) directs the system to look from the root directory, allowing to view the file from any location in the filesystem.
 
 Navigation:
 
