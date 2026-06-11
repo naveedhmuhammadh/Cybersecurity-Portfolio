@@ -1,73 +1,119 @@
-# Lab 04 – Users, Groups, Permissions & Ownership
+# Lab 04 Notes
 
-## Objective
+## User Identification Commands
 
-This lab focused on understanding how Linux controls access to files and directories using users, groups, permissions, and ownership. These concepts form the foundation of Linux security and are critical for system administration, cybersecurity operations, incident response, and penetration testing.
+### whoami
 
----
+Displays the username of the currently logged-in user.
 
-## Topics Covered
-
-- User identification
-- User IDs (UID)
-- Group IDs (GID)
-- Linux groups
-- File ownership
-- File permissions
-- Permission calculations
-- chmod
-- chown
-- Root account fundamentals
-
----
-
-## Commands Practiced
+Example:
 
 ```bash
 whoami
-id
-groups
-ls -l
-chmod
-chown
-stat
 ```
 
----
-
-## Practical Activities
-
-### 1. User Identification
-
-Used:
-
-```bash
-whoami
-id
-groups
-```
-
-to identify the currently logged-in user and group memberships.
-
-### 2. File Ownership Analysis
-
-Created a file and inspected ownership information using:
-
-```bash
-ls -l
-```
-
-### 3. Linux Permission Analysis
-
-Learned how Linux permissions are represented:
+Example Output:
 
 ```text
-r = Read
-w = Write
-x = Execute
+hex
 ```
 
-and how permissions are assigned to:
+Explanation:
+
+- `hex` is the username configured on this Kali Linux virtual machine.
+- On another Linux system, the output may be different.
+
+Examples:
+
+```text
+kali
+john
+alice
+admin
+```
+
+Purpose:
+
+Used to verify which user account is currently active.
+
+---
+
+### id
+
+Displays detailed user identity information.
+
+Example:
+
+```bash
+id
+```
+
+Example Output:
+
+```text
+uid=1000(hex) gid=1000(hex) groups=1000(hex),27(sudo)
+```
+
+Explanation:
+
+- `uid` = User ID
+- `gid` = Primary Group ID
+- `groups` = Groups the user belongs to
+- `1000` = UID assigned to this user
+- `hex` = Username configured on this system
+
+Note:
+
+Usernames and UID values vary between Linux installations.
+
+Purpose:
+
+Linux internally identifies users using numeric IDs rather than usernames.
+
+---
+
+### groups
+
+Displays the groups that the current user belongs to.
+
+Example:
+
+```bash
+groups
+```
+
+Example Output:
+
+```text
+hex sudo audio video cdrom
+```
+
+Explanation:
+
+- `hex` = Primary user group on this system
+- `sudo` = Administrative privileges
+- `audio` = Audio device access
+- `video` = Video device access
+- `cdrom` = Optical drive access
+
+Note:
+
+Group memberships vary depending on:
+
+- Linux distribution
+- Installed software
+- System configuration
+- User privileges
+
+Purpose:
+
+Used to verify permissions and access rights.
+
+---
+
+# Linux Permission Model
+
+Linux controls access using three permission categories:
 
 ```text
 Owner
@@ -75,118 +121,13 @@ Group
 Others
 ```
 
-### 4. Numeric Permissions
-
-Practiced:
-
-```text
-700
-644
-755
-777
-```
-
-and learned how Linux converts permissions using:
-
-```text
-Read = 4
-Write = 2
-Execute = 1
-```
-
-### 5. Permission Modification
-
-Used:
-
-```bash
-chmod
-```
-
-to modify file permissions and verify the changes.
-
-### 6. Ownership Investigation
-
-Learned the purpose of:
-
-```bash
-chown
-```
-
-and explored ownership structures.
-
-### 7. Root Account Investigation
-
-Investigated:
-
-```text
-/ etc/passwd
-```
-
-to understand the Linux root account and UID 0.
+Every file and directory is assigned permissions for each category.
 
 ---
 
-## Screenshots
+## Owner
 
-### User Identification
-
-![User Identification](Screenshots/screenshot1-user-identification.png)
-
-### Lab Workspace
-
-![Lab Workspace](Screenshots/screenshot2-lab-workspace.png)
-
-### File Ownership
-
-![File Ownership](Screenshots/screenshot3-file-ownership.png)
-
-### Permission Analysis
-
-![Permission Analysis](Screenshots/screenshot4-permission-analysis.png)
-
-### chmod 700
-
-![chmod700](Screenshots/screenshot5-chmod700.png)
-
-### chmod 644
-
-![chmod644](Screenshots/screenshot6-chmod644.png)
-
-### chmod 755
-
-![chmod755](Screenshots/screenshot7-chmod755.png)
-
-### chmod 777
-
-![chmod777](Screenshots/screenshot8-chmod777.png)
-
-### passwd Investigation
-
-![passwd Investigation](Screenshots/screenshot9-passwd-investigation.png)
-
-### stat Investigation
-
-![stat Investigation](Screenshots/screenshot10-stat-passwd.png)
-
----
-
-## Key Learning Outcomes
-
-- Learned how Linux identifies users using UID values.
-- Understood the role of groups in access management.
-- Learned how Linux evaluates file permissions.
-- Practiced modifying permissions using chmod.
-- Understood ownership concepts and their security relevance.
-- Learned why UID 0 represents the root account.
-- Explored how permissions contribute to Linux security.
-
----
-
-## Key Concepts Learned
-
-### User
-
-A user account represents an identity on the Linux system.
+The user account that owns a file or directory.
 
 Example:
 
@@ -194,34 +135,63 @@ Example:
 hex
 ```
 
-Linux internally identifies users using a UID rather than a username.
+Explanation:
 
-### Group
+- `hex` is the owner username on this system.
+- On another Linux machine the owner name may be different.
 
-Groups are collections of users used to simplify permission management.
-
-Instead of assigning permissions to many users individually, permissions can be assigned to a group.
-
-### Ownership
-
-Every file and directory has:
-
-- An Owner
-- A Group
-
-These determine who has access to the resource.
-
-### Permissions
-
-Linux permissions are divided into:
+Examples:
 
 ```text
-Owner
-Group
-Others
+kali
+john
+alice
+admin
 ```
 
-Permission types:
+The owner usually has the highest level of control over the file.
+
+---
+
+## Group
+
+A collection of users that share permissions.
+
+Example:
+
+```text
+sudo
+developers
+soc
+security
+```
+
+Explanation:
+
+Users who belong to the assigned group inherit the group's permissions.
+
+Benefits:
+
+- Easier administration
+- Centralized access management
+- Better scalability
+
+---
+
+## Others
+
+Any user who is neither:
+
+- The owner
+- A member of the assigned group
+
+These users receive the permissions assigned under the "Others" category.
+
+---
+
+# Permission Types
+
+Linux permissions are represented by:
 
 ```text
 r = Read
@@ -229,37 +199,389 @@ w = Write
 x = Execute
 ```
 
-### Root Account
+---
 
-The most privileged account in Linux.
+## Read (r)
 
-Important fact:
+Numeric Value:
+
+```text
+4
+```
+
+Allows:
+
+- Viewing file contents
+- Reading data
+
+Example:
+
+```bash
+cat file.txt
+```
+
+---
+
+## Write (w)
+
+Numeric Value:
+
+```text
+2
+```
+
+Allows:
+
+- Modifying file contents
+- Editing files
+
+Example:
+
+```bash
+echo "New Data" >> file.txt
+```
+
+---
+
+## Execute (x)
+
+Numeric Value:
+
+```text
+1
+```
+
+Allows:
+
+- Running programs
+- Executing scripts
+
+Example:
+
+```bash
+./script.sh
+```
+
+---
+
+# Permission Calculations
+
+Linux combines permission values using addition.
+
+Example:
+
+## rwx
+
+```text
+4 + 2 + 1 = 7
+```
+
+Result:
+
+```text
+rwx
+```
+
+Meaning:
+
+Full access.
+
+---
+
+## rw-
+
+```text
+4 + 2 = 6
+```
+
+Result:
+
+```text
+rw-
+```
+
+Meaning:
+
+Read and Write.
+
+---
+
+## r--
+
+```text
+4
+```
+
+Result:
+
+```text
+r--
+```
+
+Meaning:
+
+Read only.
+
+---
+
+# Common Permission Values
+
+### 644
+
+```text
+rw-r--r--
+```
+
+Owner:
+
+```text
+Read + Write
+```
+
+Group:
+
+```text
+Read
+```
+
+Others:
+
+```text
+Read
+```
+
+Commonly used for:
+
+- Configuration files
+- Documentation
+- Text files
+
+---
+
+### 700
+
+```text
+rwx------
+```
+
+Owner:
+
+```text
+Read + Write + Execute
+```
+
+Group:
+
+```text
+No Access
+```
+
+Others:
+
+```text
+No Access
+```
+
+Commonly used for:
+
+- Private files
+- Sensitive directories
+
+---
+
+### 755
+
+```text
+rwxr-xr-x
+```
+
+Owner:
+
+```text
+Read + Write + Execute
+```
+
+Group:
+
+```text
+Read + Execute
+```
+
+Others:
+
+```text
+Read + Execute
+```
+
+Commonly used for:
+
+- Directories
+- Scripts
+- Executable files
+
+---
+
+### 777
+
+```text
+rwxrwxrwx
+```
+
+Everyone receives:
+
+```text
+Read
+Write
+Execute
+```
+
+Security Risk:
+
+Avoid using 777 unless absolutely necessary.
+
+Potential Risks:
+
+- Unauthorized modification
+- Malware placement
+- Privilege abuse
+
+---
+
+# chmod
+
+Changes file or directory permissions.
+
+Syntax:
+
+```bash
+chmod PERMISSIONS FILE
+```
+
+Examples:
+
+```bash
+chmod 700 security.txt
+chmod 644 security.txt
+chmod 755 security.txt
+```
+
+Purpose:
+
+Modify access permissions.
+
+---
+
+# chown
+
+Changes ownership of a file or directory.
+
+Syntax:
+
+```bash
+sudo chown USER FILE
+```
+
+Example:
+
+```bash
+sudo chown user1 report.txt
+```
+
+Explanation:
+
+- `user1` is an example username.
+- On another system this could be any valid user account.
+
+Purpose:
+
+Transfer ownership to another user.
+
+---
+
+# Root Account
+
+Linux contains a special administrative account:
+
+```text
+root
+```
+
+Important Fact:
 
 ```text
 UID 0 = Root
 ```
 
+Explanation:
+
 The Linux kernel grants unrestricted privileges to any process running with UID 0.
+
+Root can:
+
+- Read any file
+- Modify any file
+- Delete any file
+- Manage users
+- Control services
+- Administer the entire operating system
 
 ---
 
-## Security Relevance
+# /etc/passwd
 
-Permissions are one of the most important security mechanisms in Linux.
+Stores user account information.
 
-Incorrect permissions can lead to:
+Example Entry:
+
+```text
+root:x:0:0:root:/root:/bin/bash
+```
+
+Important Fields:
+
+- Username
+- UID
+- GID
+- Home Directory
+- Login Shell
+
+Note:
+
+The exact contents of `/etc/passwd` differ between systems because user accounts differ.
+
+---
+
+# Security Importance
+
+Permissions are one of the most important security controls in Linux.
+
+They determine:
+
+- Who can read data
+- Who can modify data
+- Who can execute programs
+
+Incorrect permissions may lead to:
 
 - Unauthorized access
-- Data modification
-- Privilege abuse
-- Malware execution
+- Data tampering
 - Information disclosure
+- Privilege escalation
 
-Understanding users, groups, ownership, and permissions is essential for:
+---
 
-- Linux Administration
-- Security Operations (SOC)
-- Incident Response
-- Threat Hunting
-- Penetration Testing
-- Security Engineering
+# Key Concept
+
+Linux Security Foundation:
+
+```text
+User
+↓
+Group
+↓
+Permissions
+↓
+Ownership
+```
+
+Everything in Linux administration, SOC operations, incident response, and penetration testing builds upon these concepts.
