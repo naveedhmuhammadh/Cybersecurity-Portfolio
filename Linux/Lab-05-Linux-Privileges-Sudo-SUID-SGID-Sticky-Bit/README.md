@@ -35,17 +35,46 @@ By completing this lab, I learned:
 
 ## Tools and Commands Used
 
-```bash
-whoami
-id
-grep
-sudo
-which
-find
-ls
-chmod
-mkdir
-```
+### `whoami`
+
+Displays the username of the currently logged-in user.
+
+### `id`
+
+Displays detailed user information including the User ID (UID), Group ID (GID), and group memberships.
+
+### `grep`
+
+Searches for specific text patterns within files.
+
+### `sudo`
+
+Allows an authorized user to execute commands with elevated privileges.
+
+### `which`
+
+Displays the absolute path of an executable file.
+
+### `ls`
+
+Lists files and directories.
+
+Common options used in this lab:
+
+- `-l` → Displays detailed information such as permissions, ownership, size, and timestamps.
+- `-d` → Displays information about a directory itself rather than its contents.
+
+### `find`
+
+Searches the filesystem for files and directories matching specific criteria.
+
+### `chmod`
+
+Changes file and directory permissions, including special permissions such as SUID, SGID, and Sticky Bit.
+
+### `mkdir`
+
+Creates a new directory.
 
 ---
 
@@ -100,63 +129,260 @@ A common example is:
 
 ## Screenshots
 
-### User Identification
+### Screenshot 1 — User Identification
 
 ![User Identification](Screenshots/screenshot1-user-identification.png)
 
+#### Command Used
+
+```bash
+whoami
+id
+```
+
+#### Purpose
+
+Identify the currently logged-in user and display detailed user information.
+
+#### Explanation
+
+`whoami` displays the current username.
+
+`id` displays the User ID (UID), Group ID (GID), and all groups the user belongs to.
+
+This helps verify the identity and permissions of the current user.
+
 ---
 
-### Root Account Investigation
+### Screenshot 2 — Root Account Investigation
 
 ![Root Investigation](Screenshots/screenshot2-root-passwd-entry.png)
 
+#### Command Used
+
+```bash
+grep root /etc/passwd
+```
+
+#### Purpose
+
+Locate the root account entry inside the Linux user database.
+
+#### Explanation
+
+`grep` searches for text patterns.
+
+The output confirms that the root account exists and uses UID 0, which is the highest privilege level in Linux.
+
 ---
 
-### sudo Rights
+### Screenshot 3 — sudo Rights
 
 ![sudo Rights](Screenshots/screenshot3-sudo-rights.png)
 
+#### Command Used
+
+```bash
+sudo -l
+```
+
+#### Purpose
+
+Display the sudo privileges assigned to the current user.
+
+#### Explanation
+
+The command shows which commands the user is allowed to execute using sudo.
+
+This helps administrators verify privilege assignments.
+
 ---
 
-### sudo Privilege Escalation
+### Screenshot 4 — sudo Privilege Escalation
 
 ![sudo whoami](Screenshots/screenshot4-sudo-whoami.png)
 
+#### Command Used
+
+```bash
+sudo whoami
+```
+
+#### Purpose
+
+Verify privilege elevation using sudo.
+
+#### Explanation
+
+Although logged in as a standard user, the command executes with elevated privileges and returns:
+
+```text
+root
+```
+
+This demonstrates temporary privilege escalation.
+
 ---
 
-### Locating System Binaries
+### Screenshot 5 — Locating System Binaries
 
 ![which Commands](Screenshots/screenshot5-which-commands.png)
 
+#### Command Used
+
+```bash
+which sudo
+which passwd
+```
+
+#### Purpose
+
+Locate the absolute path of executable binaries.
+
+#### Explanation
+
+`which` displays the exact path of the executable Linux will run when the command is entered.
+
+Example:
+
+```text
+/usr/bin/sudo
+/usr/bin/passwd
+```
+
 ---
 
-### SUID on sudo
+### Screenshot 6 — SUID on sudo
 
 ![sudo SUID](Screenshots/screenshot6-sudo-suid.png)
 
+#### Command Used
+
+```bash
+ls -l /usr/bin/sudo
+```
+
+#### Purpose
+
+Inspect the permissions assigned to the sudo binary.
+
+#### Explanation
+
+The `-l` option displays detailed file information.
+
+The letter `s` in the owner permission field indicates that the SUID bit is enabled.
+
+This allows sudo to run with the permissions of its owner, which is root.
+
 ---
 
-### Discovering SUID Files
+### Screenshot 7 — Discovering SUID Files
 
 ![SUID Discovery](Screenshots/screenshot7-suid-discovery.png)
 
+#### Command Used
+
+```bash
+find /usr/bin -perm -4000 2>/dev/null
+```
+
+#### Purpose
+
+Search for SUID-enabled files.
+
+#### Explanation
+
+`find` searches the filesystem.
+
+`-perm -4000` searches specifically for SUID files.
+
+`2>/dev/null` suppresses error messages by redirecting them to the Linux null device.
+
 ---
 
-### passwd SUID Analysis
+### Screenshot 8 — passwd SUID Analysis
 
 ![passwd SUID](Screenshots/screenshot8-passwd-suid.png)
 
+#### Command Used
+
+```bash
+ls -l $(which passwd)
+```
+
+#### Purpose
+
+Inspect the passwd binary and verify its permissions.
+
+#### Explanation
+
+`$(which passwd)` is command substitution.
+
+Linux first executes:
+
+```bash
+which passwd
+```
+
+and then passes the result to:
+
+```bash
+ls -l
+```
+
+The output confirms that the passwd utility also uses SUID permissions.
+
 ---
 
-### Sticky Bit Investigation
+### Screenshot 9 — Sticky Bit Investigation
 
 ![Sticky Bit](Screenshots/screenshot9-sticky-bit-tmp.png)
 
+#### Command Used
+
+```bash
+ls -ld /tmp
+```
+
+#### Purpose
+
+Inspect the permissions of the shared temporary directory.
+
+#### Explanation
+
+The `-d` option displays information about the directory itself.
+
+The letter `t` at the end of the permissions indicates that the Sticky Bit is enabled.
+
+This prevents users from deleting files owned by other users.
+
 ---
 
-### SGID Practical Demonstration
+### Screenshot 10 — SGID Practical Demonstration
 
 ![SGID Practice](Screenshots/screenshot10-sgid-practice.png)
+
+#### Command Used
+
+```bash
+mkdir TeamShare
+chmod g+s TeamShare
+ls -ld TeamShare
+```
+
+#### Purpose
+
+Demonstrate how SGID works on directories.
+
+#### Explanation
+
+`mkdir` creates the directory.
+
+`chmod g+s` enables the Set Group ID bit.
+
+`ls -ld` verifies the permissions.
+
+The letter `s` in the group permission field confirms that SGID has been successfully applied.
 
 ---
 
@@ -164,7 +390,12 @@ A common example is:
 
 Understanding Linux privilege management is critical for security professionals.
 
-Attackers frequently attempt to exploit misconfigured permissions and SUID binaries to gain elevated privileges.
+Attackers frequently attempt to exploit:
+
+- Misconfigured permissions
+- Excessive privileges
+- Vulnerable SUID binaries
+- Weak access controls
 
 Defenders must understand:
 
