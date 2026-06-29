@@ -367,7 +367,7 @@ Process stops running.
 
 # Why Killing Processes Matters
 
-Administrators often terminate:
+Administrators often terminate: 
 
 - Frozen applications
 - Excessive CPU consumers
